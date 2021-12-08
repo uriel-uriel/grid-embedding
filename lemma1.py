@@ -40,8 +40,12 @@ class Lemma1(Scene):
         self.wait()
 
         #
+
+        p_text = MarkupText("Particiones de <i>T</i>").shift(DOWN*3)
+        self.play(Create(p_text))
         self.highlight_partitions(d)
         self.add_labels()
+        self.play(FadeOut(p_text))
         self.wait()
 
         # move them to the side to make space to explain
@@ -54,11 +58,14 @@ class Lemma1(Scene):
         self.play(tree_g.animate.arrange_in_grid(rows=2, cols=1, buff=2.0))
         self.play(tree_g.animate.shift(LEFT*4.5))
 
+        sl_text = MarkupText("Un modelo-rl de <i>T</i>").next_to(tree_g, DOWN).scale(0.7)
+        self.play(Create(sl_text))
 
         # Build smodel
-        self.play(Create(self.smodel[d]))
+        self.play(Create(self.smodel[d].shift(RIGHT*2)))
         self.v_already_created = [d]
         self.e_already_created = []
+        self.wait(2)
 
         # Missing in lemma when to add the vertex
         self.draw_level([d])
@@ -71,6 +78,8 @@ class Lemma1(Scene):
 
         self.draw_level(self.partitions[1])
 
+        self.wait()
+
 
     def draw_level(self, nbunch):
         for vertex in nbunch:
@@ -79,16 +88,18 @@ class Lemma1(Scene):
             for edge in edges:
                 if edge not in self.e_already_created:
                     self.e_already_created.append(edge)
-                    edges_tbc.append(Create(self.smodel.edges[edge]))
+                    edges_tbc.append(Create(self.smodel.edges[edge].shift(RIGHT*2)))
 
             if len(edges_tbc) > 0: #vertex may not have uncreated edges
                 self.play(*edges_tbc)
+
+            self.wait(2)
 
             nodes_tbc = []
             for node in self.neighbors_of(vertex):
                 if node not in self.v_already_created:
                     self.v_already_created.append(node)
-                    nodes_tbc.append(Create(self.smodel[node]))
+                    nodes_tbc.append(Create(self.smodel[node].shift(RIGHT*2)))
 
             if len(nodes_tbc) > 0: #node may not have uncreated neighbors
                 self.play(*nodes_tbc)
@@ -111,7 +122,7 @@ class Lemma1(Scene):
 
     def draw_slmodel(self):
         sl_model = self.tree.sl_model
-        text = MarkupText("Un sl-modelo de <i>T</i>").next_to(sl_model, DOWN)
+        text = MarkupText("Un ordenamiento local para <i>T</i>").next_to(sl_model, DOWN)
         self.play(Create(sl_model), Create(text))
         self.wait(2)
         self.play(FadeOut(sl_model), Uncreate(text))
@@ -160,7 +171,7 @@ class Tree():
             layout = self.get_orthogonal_layout(v, neighbors)
 
             cfg = {**self.V_CFG}
-            cfg[v] = {"fill_color": RED, **cfg[v]}
+            cfg[v] = {"fill_color": GREEN_C, **cfg[v]}
             local_ordering = Graph(mV, mE, labels=True, vertex_config=cfg, layout=layout)
 
             sl_model.append(local_ordering)
