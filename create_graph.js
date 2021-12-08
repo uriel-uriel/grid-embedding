@@ -10,7 +10,7 @@ function setup() {
 }
 
 function draw() {
-  background(23);
+  background(23, 33, 33);
   stroke('#fafafa')
   strokeWeight(1)
   for (var i = S; i >= 0; i-=50) {
@@ -22,7 +22,7 @@ function draw() {
   } else {
     where_da_point()
   }
-  
+
   drawAll()
 }
 
@@ -44,7 +44,7 @@ function where_da_point() {
   const sY = mouseY
   const decx = sX % 50;
   const decy = sY % 50;
-  
+
   const x = decx > 24 ? (sX - decx) + 50 : sX - decx
   const y = decy > 24 ? (sY - decy) + 50 : sY - decy
   stroke(111, 230, 99)
@@ -58,32 +58,32 @@ function where_da_line() {
   const sY = mouseY
   const decx = sX % 50;
   const decy = sY % 50;
-  
+
   stroke(11, 230, 99)
   strokeWeight(3)
-  
+
   if (decx+decy <= 50 && decx > decy) {
     const x = Math.floor(sX/50) * 50;
     const y = Math.floor(sY/50) * 50;
-    
+
     current_edge = [{x:x, y:y}, {x:x+50, y:y}]
     line(x, y, x+50, y);
   } else if (decx+decy <= 50 && decx <= decy) {
     const x = Math.floor(sX/50) * 50;
     const y = Math.floor(sY/50) * 50;
-    
+
     current_edge = [{x:x, y:y}, {x:x, y:y+50}]
     line(x, y, x, y+50);
   } else if (decx+decy > 50 && decx > decy) {
     const x = Math.ceil(sX/50) * 50;
     const y = Math.floor(sY/50) * 50;
-    
+
     current_edge = [{x:x, y:y}, {x:x, y:y+50}]
     line(x, y, x, y+50);
   } else {
     const x = Math.floor(sX/50) * 50;
     const y = Math.ceil(sY/50) *50;
-    
+
     current_edge = [{x:x, y:y}, {x:x+50, y:y}]
     line(x, y, x+50, y);
   }
@@ -102,6 +102,9 @@ function keyPressed() {
     mode = (mode + 1) % 2
   } else if (keyCode === 80) {
     printGraph()
+  } else if (keyCode === 67) {
+    nodes = []
+    edges = []
   }
 }
 
